@@ -24,7 +24,6 @@ type ExitList struct {
 	module map[string]*list.Element
 }
 
-
 // Initialize exit list.
 func InitExitList() {
 	exitList = &ExitList{

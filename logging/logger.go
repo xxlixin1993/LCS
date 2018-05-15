@@ -6,8 +6,9 @@ import (
 	"path"
 	"runtime"
 
+	"github.com/xxlixin1993/CacheGo/utils"
 	"github.com/xxlixin1993/LCS/configure"
-	"github.com/xxlixin1993/LCS/utils"
+	"github.com/xxlixin1993/LCS/graceful_exit"
 	"sync"
 )
 
@@ -67,7 +68,7 @@ func InitLog() error {
 	}
 
 	// graceful exit
-	utils.GetExitList().Pop(logger)
+	graceful_exit.GetExitList().Pop(logger)
 
 	go logger.Run()
 

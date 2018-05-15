@@ -14,7 +14,6 @@ import (
 	"github.com/xxlixin1993/LCS/utils"
 )
 
-
 var appConfig *Config
 
 var (

@@ -1,13 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"flag"
-	"runtime"
-	"github.com/xxlixin1993/LCS/graceful_exit"
+	"fmt"
 	"github.com/xxlixin1993/LCS/configure"
+	"github.com/xxlixin1993/LCS/graceful_exit"
 	"github.com/xxlixin1993/LCS/logging"
+	"os"
+	"runtime"
+	"os/signal"
+	"syscall"
 )
 
 const (
@@ -15,7 +17,8 @@ const (
 )
 
 func main() {
-	fmt.Println("build project")
+	initFrame()
+	waitSignal()
 }
 
 // Initialize framework
@@ -33,7 +36,7 @@ func initFrame() {
 	}
 
 	// Initialize exitList
-	utils.InitExitList()
+	graceful_exit.InitExitList()
 
 	// Initialize configure
 	configErr := configure.InitConfig(*configFile, *runMode)
@@ -50,4 +53,25 @@ func initFrame() {
 	}
 
 	logging.Trace("Initialized frame")
+}
+
+
+// Wait signal
+func waitSignal() {
+	sigChan := make(chan os.Signal)
+	signal.Notify(sigChan)
+
+	sig := <-sigChan
+
+	logging.TraceF("signal: %d", sig)
+
+	switch sig {
+	case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
+		logging.Trace("exit...")
+		graceful_exit.GetExitList().Stop()
+	case syscall.SIGUSR1:
+		logging.Trace("catch the signal SIGUSR1")
+	default:
+		logging.Trace("signal do not know")
+	}
 }
