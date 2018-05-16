@@ -7,9 +7,10 @@ import (
 	"github.com/xxlixin1993/LCS/graceful_exit"
 	"github.com/xxlixin1993/LCS/logging"
 	"os"
-	"runtime"
 	"os/signal"
+	"runtime"
 	"syscall"
+	"github.com/xxlixin1993/LCS/server"
 )
 
 const (
@@ -18,6 +19,7 @@ const (
 
 func main() {
 	initFrame()
+	run()
 	waitSignal()
 }
 
@@ -55,6 +57,10 @@ func initFrame() {
 	logging.Trace("Initialized frame")
 }
 
+// Run server
+func run() {
+	go server.StartServer()
+}
 
 // Wait signal
 func waitSignal() {
