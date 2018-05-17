@@ -68,7 +68,9 @@ func InitLog() error {
 	}
 
 	// graceful exit
-	graceful_exit.GetExitList().Pop(logger)
+	if exitErr := graceful_exit.GetExitList().Pop(logger); exitErr != nil {
+		return exitErr
+	}
 
 	go logger.Run()
 

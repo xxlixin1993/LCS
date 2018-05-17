@@ -54,7 +54,9 @@ func initHttpServer() error {
 	}
 
 	// graceful exit
-	graceful_exit.GetExitList().Pop(httpServer)
+	if httpErr := graceful_exit.GetExitList().Pop(httpServer); httpErr != nil {
+		return httpErr
+	}
 
 	return nil
 }
