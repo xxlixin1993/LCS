@@ -6,11 +6,11 @@ import (
 	"github.com/xxlixin1993/LCS/configure"
 	"github.com/xxlixin1993/LCS/graceful_exit"
 	"github.com/xxlixin1993/LCS/logging"
+	"github.com/xxlixin1993/LCS/server"
 	"os"
 	"os/signal"
 	"runtime"
 	"syscall"
-	"github.com/xxlixin1993/LCS/server"
 )
 
 const (

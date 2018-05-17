@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/xxlixin1993/LCS/app"
 	"github.com/xxlixin1993/LCS/configure"
+	"github.com/xxlixin1993/LCS/graceful_exit"
 	"net/http"
 	"time"
-	"github.com/xxlixin1993/LCS/graceful_exit"
 )
 
 const KHttpServerModuleName = "httpServerModule"
@@ -65,7 +65,7 @@ func initHttpServer() error {
 func getServerMux() *http.ServeMux {
 	mux := http.NewServeMux()
 
-	// TODO configure
+	// TODO Regular url
 	mux.HandleFunc("/lc", app.LiveCommit)
 	return mux
 }
