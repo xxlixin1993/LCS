@@ -7,6 +7,8 @@ import (
 	"github.com/xxlixin1993/LCS/graceful_exit"
 	"net/http"
 	"time"
+	"strconv"
+	"io"
 )
 
 const KHttpServerModuleName = "httpServerModule"
@@ -40,6 +42,7 @@ func initHttpServer() error {
 	readTimeout := configure.DefaultInt("http.read_timeout", 4)
 	writeTimeout := configure.DefaultInt("http.write_timeout", 3)
 	socketLink := host + ":" + port
+	router := &RouterHandler{}
 
 	httpServer = &HttpServer{
 		host:       host,
@@ -47,7 +50,7 @@ func initHttpServer() error {
 		socketLink: socketLink,
 		server: &http.Server{
 			Addr:         socketLink,
-			Handler:      getServerMux(),
+			Handler:      router,
 			ReadTimeout:  time.Duration(readTimeout) * time.Second,
 			WriteTimeout: time.Duration(writeTimeout) * time.Second,
 		},
@@ -59,15 +62,6 @@ func initHttpServer() error {
 	}
 
 	return nil
-}
-
-// Get a new ServeMux.
-func getServerMux() *http.ServeMux {
-	mux := http.NewServeMux()
-
-	// TODO Regular url
-	mux.HandleFunc("/lc", app.LiveCommit)
-	return mux
 }
 
 // Start http server
@@ -83,4 +77,26 @@ func Run() error {
 	}
 
 	return nil
+}
+
+type RouterHandler struct {
+}
+
+// RouterHandler implements http.Handler.
+func (rh *RouterHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// TODO Optimize later
+	length := len(r.URL.Path)
+	if length == 0 {
+		io.WriteString(w, "Not supported, only roomId")
+		return
+	}
+
+	roomIdInt, err := strconv.Atoi(r.URL.Path[1:length])
+	if err != nil {
+		io.WriteString(w, "Not supported, url path should be int")
+		return
+	}
+
+	roomIdUint32 := uint32(roomIdInt)
+	app.LiveCommit(w, r, roomIdUint32)
 }

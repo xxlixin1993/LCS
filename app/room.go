@@ -42,7 +42,6 @@ func newRoom() *Room {
 	}
 }
 
-// TODO Start live commit io pool.
 func (r *Room) run() {
 	for {
 		select {

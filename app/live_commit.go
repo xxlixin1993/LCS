@@ -18,14 +18,14 @@ var upgrader = websocket.Upgrader{
 }
 
 // Handle WebSocket live commit
-func LiveCommit(w http.ResponseWriter, r *http.Request) {
+func LiveCommit(w http.ResponseWriter, r *http.Request, roomId uint32) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		logging.ErrorF("Upgrade error(%s)", err)
 		return
 	}
 
-	room := GetRoom(uint32(1))
+	room := GetRoom(roomId)
 
 	client := &Client{
 		room: room,
