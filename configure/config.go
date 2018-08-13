@@ -134,7 +134,7 @@ func (c *Config) get(key string) string {
 		option  string
 	)
 
-	keys := strings.Split(strings.ToLower(key), ".")
+	keys := strings.Split(strings.ToLower(key), "::")
 
 	if len(keys) >= 2 {
 		section = keys[0]
